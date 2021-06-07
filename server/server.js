@@ -48,13 +48,16 @@ app.get(
   }
 );
 
+// IS LOGOUT ROUTE EVEN NECESSARY?? CAN SIMPLY UPDATE STATE ON FRONTEND
+// WHAT DOES BACKEND NEED TO DO? AND WHAT SHOULD RESPONSE BE??
 // logout
 // RES: redirect to home page
 app.get(
   '/logout',
   /* <some middleware> */
   (req, res) => {
-    res.redirect('/');
+    // res.redirect('/');
+    res.send(200).json(res.locals.isLoggedIn);
   }
 );
 
