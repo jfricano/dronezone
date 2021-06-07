@@ -1,0 +1,10 @@
+@import '~bootstrap/scss/bootstrap';
+
+.outer-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 800px;
+  max-height: 800px;
+  background-color: gray;
+}
