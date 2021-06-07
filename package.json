@@ -9,7 +9,7 @@
     "dev": "nodemon server/server.js & NODE_ENV=development webpack serve --open",
     "dockerprod": "docker run --name monarq-prod -p 3000:3000 monarqpath/monarq-prod",
     "dockerdev": "docker-compose -f docker-compose-dev.yml up",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose"
   },
   "repository": {
     "type": "git",
@@ -39,9 +39,11 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^5.2.6",
     "file-loader": "^6.2.0",
+    "jest": "^27.0.4",
     "nodemon": "^2.0.7",
     "sass-loader": "^12.0.0",
     "style-loader": "^2.0.0",
+    "supertest": "^6.1.3",
     "url-loader": "^4.1.1",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.1",
