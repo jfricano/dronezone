@@ -17,7 +17,9 @@
 -- SET xmloption = content;
 -- SET client_min_messages = warning;
 -- SET row_security = off;
-CREATE SEQUENCE jobApps_id_seq;
+
+
+-- CREATE SEQUENCE jobApps_id_seq;
 
 -- create the user table
 CREATE TABLE  public.users (
@@ -32,15 +34,16 @@ CREATE TABLE  public.users (
 -- create the jobApps table
 CREATE TABLE public.job_apps (
 	-- "_id" bigint PRIMARY KEY DEFAULT pseudo_encrypt(nextval('jobApps_id_seq')),
-  "_id" serial NOT NULL--,
-	"company" varchar NOT NULL, 
+  "_id" serial NOT NULL,
+	"company" varchar NOT NULL,
+  "role" varchar NOT NULL,
 	"status" smallint NOT NULL,
 	"date_applied" date,
 	"priority" smallint DEFAULT 2,
 	"link" text,
-	"notes" text, -- lots of chars
+	"notes" text,
   "user_id" bigint,
-	CONSTRAINT "job_apps_pk" PRIMARY KEY ("_id")
+	CONSTRAINT "job_apps_pk" PRIMARY KEY ("_id"),
   CONSTRAINT "job_apps_fk" FOREIGN KEY ("user_id") REFERENCES public.users("_id")
 ) WITH (
   OIDS=FALSE
