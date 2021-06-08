@@ -1,35 +1,71 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from './Header';
-import Table from 'react-bootstrap/Table';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import {
+  useDisclosure,
+  Container,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react';
 
-export default function Display() {
+export default function Display(props) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modal, useModal] = useState({
+    company: 'Test',
+    role: 'Fake role',
+    status: 'Rejected',
+    dateApplied: '6/7/2021',
+  });
+  const openModal = () => {
+    console.log('hi');
+    onOpen();
+  };
   return (
-    <div>
-      <Header />
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Company</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Date Applied</th>
-            <th>Priority</th>
-            <th>Link</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr onClick={createModal}>
-            <th>Apple</th>
-            <th>Senior Engineer</th>
-            <th>Applied</th>
-            <th>6/5/2021</th>
-            <th>3</th>
-            <th>examplelink.com</th>
-          </tr>
-        </tbody>
+    <Container maxW='container.lg'>
+      <Header useLoginStatus={props.useLoginStatus} />
+      <Table variant='simple'>
+        <Thead>
+          <Tr>
+            <Th>Company Name</Th>
+            <Th>Position</Th>
+            <Th>Status</Th>
+            <Th>Date Applied</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          <Tr onClick={openModal}>
+            <Th>Apple</Th>
+            <Th>Senior Engineer</Th>
+            <Th>Applied</Th>
+            <Th>6/7/2021</Th>
+          </Tr>
+        </Tbody>
       </Table>
-    </div>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add an Application</ModalHeader>
+          <ModalBody>
+            {modal.company}
+            <br />
+            {modal.role}
+            <br />
+            {modal.status}
+            <br />
+            {modal.dateApplied}
+            <br />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </Container>
   );
 }
