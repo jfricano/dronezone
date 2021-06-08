@@ -1,8 +1,9 @@
+require('dotenv').config();
 const express = require("express");
 const path = require("path");
 
 const app = express();
-const PORT = 3000;
+const { PORT } = process.env;
 
 // parsers
 // app.use(cookieParser());
@@ -48,13 +49,16 @@ app.get(
   }
 );
 
+// IS LOGOUT ROUTE EVEN NECESSARY?? CAN SIMPLY UPDATE STATE ON FRONTEND
+// WHAT DOES BACKEND NEED TO DO? AND WHAT SHOULD RESPONSE BE??
 // logout
 // RES: redirect to home page
 app.get(
   '/logout',
   /* <some middleware> */
   (req, res) => {
-    res.redirect('/');
+    // res.redirect('/');
+    res.send(200).json(res.locals.isLoggedIn);
   }
 );
 

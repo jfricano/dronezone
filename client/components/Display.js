@@ -38,17 +38,19 @@ export default function Display(props) {
     onOpen();
   };
 
+  let tableData;
+
   // use effect to make fetch request to back end for initial list of array items
   useEffect(() => {
     // should be returning results of fetch request, hopefully an array?
-    axios.get('/dashboard').then((res) => console.log(res.data));
+    axios.get('/dashboard').then((res) => {});
   }, []);
 
   return (
     <Container maxW='container.lg'>
       <Header useLoginStatus={props.useLoginStatus} />
       <Container maxW='container.lg' centerContent>
-        Welcome to DroneZone!
+        Nektr
       </Container>
       <Table variant='simple'>
         <Thead>
@@ -87,6 +89,8 @@ export default function Display(props) {
             {modal.notes}
           </ModalBody>
           <ModalFooter>
+            <Button variant='ghost'>Edit Application</Button>
+            <Button variant='ghost'>Delete Application</Button>
             <Button onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>
