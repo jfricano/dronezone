@@ -1,14 +1,15 @@
 require('dotenv').config();
 const express = require("express");
 const path = require("path");
+const jobAppController = require('./controllers/jobAppController');
 
 const app = express();
 const { PORT } = process.env;
 
 // parsers
 // app.use(cookieParser());
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // serve static files
 app.use(express.static(path.resolve(__dirname, './public')));
@@ -32,9 +33,7 @@ app.get("/", (req, res) => {
 app.post(
   '/signup',
   /* <some middleware */
-  (req, res) => {
-    res.status(200).json(res.locals.user);
-  }
+  (req, res) => res.status(200).json(res.locals.user)
 );
 
 // login / authenticate using oAuth
