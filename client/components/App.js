@@ -2,14 +2,23 @@ import React from 'react';
 import { useState } from 'react';
 import Display from './Display';
 import Login from './Login';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+
 import '../../public/index.scss';
 
 export default function App() {
   const [loginStatus, useLoginStatus] = useState(false);
-
+  const theme = extendTheme({
+    colors: {
+      brand: {
+        50: '#44337A',
+        100: '#B794F4',
+        500: '#ecec40', // you need this
+      },
+    },
+  });
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <div className='outer-container'>
         {loginStatus ? (
           <Display useLoginStatus={useLoginStatus} />
