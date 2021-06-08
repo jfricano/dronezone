@@ -1,7 +1,7 @@
 const db = require("../database/dbModels");
 
-const jobAppController = {};
+const getAllJobApps = () => {
 
-jobAppController.getAllApps
+};
 
-module.exports = jobAppController;
+module.exports = { getAllJobApps, };
