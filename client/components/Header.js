@@ -44,13 +44,16 @@ export default function Header(props) {
 
     axios.post('/dashboard', reqBody).then((res) => {
       // do something with returned ID
+      const tempApps = props.apps;
+      tempApps.push(res);
+      props.useApps(tempApps);
       onClose();
     });
   };
   return (
     <Container className='header' maxW='container.lg'>
       {/* Modal for add Application */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size='xl'>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add an Application</ModalHeader>
