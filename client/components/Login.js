@@ -1,11 +1,12 @@
 import React from 'react';
+import { Button, Container } from '@chakra-ui/react';
 
 export default function Login(props) {
   return (
-    <div>
-      <button onClick={() => props.useLoginStatus(true)}>
+    <Container centerContent className='login-container'>
+      <Button onClick={() => props.useLoginStatus(true)}>
         Log in with Google
-      </button>
-    </div>
+      </Button>
+    </Container>
   );
 }
