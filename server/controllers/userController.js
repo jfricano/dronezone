@@ -21,6 +21,7 @@ const verifyCookie = (req, res, next) => {
 };
 
 module.exports = {
+  addUser,
   verifyUser,
   setCookie,
   verifyCookie
