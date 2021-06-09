@@ -8,50 +8,68 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Tr,
+  Th,
 } from '@chakra-ui/react';
+import axios from 'axios';
 
 export default function DisplayModal(props) {
-  const deleteApp = (id) => {
-    axios.delete('/', {}, { params: { id } }).then((res) => {
-      const tempArr = apps;
+  const deleteApp = (jobAppId) => {
+    axios.delete(`/${jobAppId}`).then((res) => {
+      const tempArr = props.apps;
       let removeIndex;
       for (let i = 0; i < tempArr.length; i += 1) {
-        if (tempArr[i].id === id) {
+        if (props.ids[i] === jobAppId) {
           removeIndex = i;
           break;
         }
       }
       tempArr.splice(removeIndex, 1);
-      useApps(tempArr);
+      props.useApps([...tempArr]);
+      props.onClose();
     });
   };
 
-  const updateApp = (id) => {
+  const updateApp = (jobAppId) => {
     const company = document.getElementById('coname').value;
     const role = document.getElementById('role').value;
     const status = document.getElementById('status').value;
-    const date = document.getElementById('date').value;
+    const date_applied = document.getElementById('date').value;
     const priority = document.getElementById('priority').value;
     const notes = document.getElementById('notes').value;
     const link = document.getElementById('link').value;
 
     const modalUpdate = {
-      ...modal,
+      ...props.modal,
       company,
       role,
       status,
-      date,
+      date_applied,
       priority,
       notes,
       link,
     };
 
-    useModal(modalUpdate);
+    props.useModal(modalUpdate);
 
-    axios.put('/', {}, { params: { id } }).then((res) => {
-      const tempArr = props.apps;
-      tempArr.push(res);
-      props.useArrs(tempArr);
+    axios.put(`/${jobAppId}`, modalUpdate).then((res) => {
+      const tempArr = [...props.apps];
+      for (let i = 0; i < tempArr.length; i += 1) {
+        if (props.ids[i] === jobAppId) {
+          tempArr[i] = (
+            <Tr onClick={() => props.openModal(res.data)}>
+              <Th>{res.data.company}</Th>
+              <Th>{res.data.role}</Th>
+              <Th>{res.data.status}</Th>
+              <Th>{res.data.date_applied}</Th>
+              <Th>{res.data.priority}</Th>
+            </Tr>
+          );
+          break;
+        }
+      }
+      props.useApps([...tempArr]);
+      props.onClose();
     });
   };
   return (
@@ -94,7 +112,11 @@ export default function DisplayModal(props) {
               <br /> <br />
               <label>Date you Applied</label>
               <br />
-              <input type='date' id='date' defaultValue={props.modal.date} />
+              <input
+                type='date'
+                id='date'
+                defaultValue={props.modal.date_applied}
+              />
               <br /> <br />
               <label>
                 Priority - level 1 (low), level 2, or level 3 (high)
@@ -122,7 +144,7 @@ export default function DisplayModal(props) {
             <div>
               <b>Status</b>: {props.modal.status}
               <br />
-              <b>Date</b>: {props.modal.date}
+              <b>Date</b>: {props.modal.date_applied}
               <br />
               <b>Priority</b>: {props.modal.priority}
               <br />
@@ -133,7 +155,13 @@ export default function DisplayModal(props) {
         <ModalFooter>
           {props.modalEdit ? (
             <div>
-              <Button variant='ghost' onClick={() => updateApp(props.modal.id)}>
+              <Button
+                variant='ghost'
+                onClick={() => {
+                  updateApp(props.modal._id);
+                  props.useModalEdit(false);
+                }}
+              >
                 Update Application
               </Button>{' '}
               <Button
@@ -150,7 +178,10 @@ export default function DisplayModal(props) {
               <Button variant='ghost' onClick={() => props.useModalEdit(true)}>
                 Edit Application
               </Button>{' '}
-              <Button variant='ghost' onClick={() => deleteApp(props.modal.id)}>
+              <Button
+                variant='ghost'
+                onClick={() => deleteApp(props.modal._id)}
+              >
                 Delete Application
               </Button>{' '}
               <Button onClick={props.onClose}>Close</Button>

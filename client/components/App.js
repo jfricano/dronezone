@@ -7,7 +7,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import '../../public/index.scss';
 
 export default function App() {
-  const [loginStatus, useLoginStatus] = useState(false);
+  const [loginStatus, useLoginStatus] = useState(true);
   const theme = extendTheme({
     colors: {
       brand: {
