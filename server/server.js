@@ -89,7 +89,7 @@ app.delete("/:jobAppId", deleteJobApp, (req, res) =>
 );
 
 // RESPONDS with updated record
-app.put(
+app.patch(
   "/:jobAppId",
   updateJobApp,
   (req, res) => res.status(200).json(res.locals.updatedJobApp)
