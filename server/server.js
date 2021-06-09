@@ -1,7 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
-const { getAllJobApps, addJobApp } = require("./controllers/jobAppController");
+const {
+  getAllJobApps,
+  addJobApp,
+  deleteJobApp,
+} = require("./controllers/jobAppController");
 
 const app = express();
 const { PORT } = process.env;
@@ -82,10 +86,8 @@ app.post("/dashboard", addJobApp, (req, res) =>
 // update the database
 // upon success, RES: application id for success
 // upon failure, RES: null for failure
-app.delete(
-  "/:jobAppId",
-  /* <some middlware> */
-  (req, res) => res.status(200).json(res.locals.deletedJobAppId)
+app.delete("/:jobAppId", deleteJobApp, (req, res) =>
+  res.status(200).json(res.locals.deletedJobAppId)
 );
 
 // update an application

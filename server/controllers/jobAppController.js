@@ -1,6 +1,13 @@
 const db = require("../database/dbModels");
-// const cryptoRandomString = require("crypto-random-string");
+const TABLE_NAME = "job_apps";
 
+// TODO - UPDATE THIS ONCE COOKIES AND SESSIONS ARE WORKING
+/**
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 const getAllJobApps = (req, res, next) => {
   // const { ssid } = req.cookies;
   // const queryString = `
@@ -9,8 +16,8 @@ const getAllJobApps = (req, res, next) => {
   // `;
 
   const queryString = `
-    SELECT * FROM job_apps
-    WHERE job_apps.user_id = 1
+    SELECT * FROM ${TABLE_NAME}
+    WHERE ${TABLE_NAME}.user_id = 1
   `;
 
   db.query(queryString)
@@ -27,6 +34,13 @@ const getAllJobApps = (req, res, next) => {
     );
 };
 
+// TODO - UPDATE THIS ONCE SESSIONS AND COOKIES ARE WORKING
+/**
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 const addJobApp = (req, res, next) => {
   // const user_id = req.cookies.ssid;
   const user_id = Math.ceil(Math.random() * 4);
@@ -35,7 +49,7 @@ const addJobApp = (req, res, next) => {
   let queryString = "";
 
   try {
-    queryString += "INSERT INTO job_apps (";
+    queryString += `INSERT INTO ${TABLE_NAME} (`;
     for (let i = 0; i < queryFields.length; i++) {
       queryString += queryFields[i] + ", ";
       queryParams.push(req.body[queryFields[i]]);
@@ -44,8 +58,7 @@ const addJobApp = (req, res, next) => {
     for (let i = 0; i < queryParams.length; i++)
       queryString += `'${queryParams[i]}', `;
     queryString += `${user_id}) RETURNING *`;
-  } 
-  catch (err) {
+  } catch (err) {
     console.log(err);
   }
 
@@ -62,8 +75,27 @@ const addJobApp = (req, res, next) => {
     );
 };
 
-deleteJobApp = (req, res, next) => {
-  
+/**
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+ deleteJobApp = (req, res, next) => {
+  const queryString = `DELETE FROM ${TABLE_NAME} WHERE ${TABLE_NAME}._id = ${req.params.jobAppId} RETURNING *`;
+
+  db.query(queryString)
+    .then((data) => {
+      res.locals.deletedJobAppId = data.rows.length ? data.rows[0]._id : null;
+      console.log(res.locals.deletedJobAppId);
+      next();
+    })
+    .catch((err) =>
+      next({
+        log: err,
+        err: "ERROR in jobAppController.deleteJobApp",
+      })
+    );
 };
 
-module.exports = { getAllJobApps, addJobApp };
+module.exports = { getAllJobApps, addJobApp, deleteJobApp };
