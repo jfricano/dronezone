@@ -4,7 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "nodemon server/server.js",
+    "start": "server/server.js",
     "build": "NODE_ENV=production webpack",
     "dev": "nodemon server/server.js & NODE_ENV=development webpack serve --open",
     "dockerprod": "docker run --name monarq-prod -p 3000:3000 monarqpath/monarq-prod",
