@@ -9,46 +9,81 @@ import {
   Tbody,
   Tr,
   Th,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
 } from '@chakra-ui/react';
+import DisplayModal from './DisplayModal';
 import axios from 'axios';
 
 export default function Display(props) {
   // handles the opening and closing of the Modal
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // state object to hold the current values for the modal
-  // ultimate goal is to house props for selected item to fill out the modal
-  const [modal, useModal] = useState({
-    company: 'Test',
-    role: 'Fake role',
-    status: 'Rejected',
-    dateApplied: '6/7/2021',
-    priority: 2,
-  });
+  // state object to hold array of applications
+  const [apps, useApps] = useState([]);
 
-  // on click function to handle the opening of the modal. want to use the useModal here
-  const openModal = () => {
+  // state object to hold the current values for the modal
+  const [modal, useModal] = useState({});
+
+  const [modalEdit, useModalEdit] = useState(false);
+
+  // on click function to handle the opening of the modal
+  const openModal = (app) => {
+    useModal(app);
     onOpen();
+  };
+
+  // conditionally fills table once apps has been populated
+  const fillTable = () => {
+    const rows = [];
+    for (let i = 0; i < apps.length; i += 1) {
+      rows.push(apps[i]);
+    }
+    return rows;
   };
 
   // use effect to make fetch request to back end for initial list of array items
   useEffect(() => {
     // should be returning results of fetch request, hopefully an array?
-    axios.get('/dashboard').then((res) => console.log(res.data));
+    axios.get('/dashboard').then((res) => {
+      const tempArr = [];
+      // temporary response before DB route is connected
+      const tempRes = [
+        {
+          company: 'Apple',
+          role: 'Senior Engineer',
+          status: 'Applied',
+          date: '2021-06-07',
+          priority: 2,
+          link: 'http://apple.com',
+          notes: 'Notes for the application!',
+          id: 7,
+        },
+      ];
+      tempRes.forEach((app) => {
+        tempArr.push(
+          <Tr onClick={() => openModal(app)}>
+            <Th>{app.company}</Th>
+            <Th>{app.role}</Th>
+            <Th>{app.status}</Th>
+            <Th>{app.date}</Th>
+            <Th>{app.priority}</Th>
+          </Tr>
+        );
+      });
+      useApps(tempArr);
+    });
   }, []);
 
   return (
     <Container maxW='container.lg'>
-      <Header useLoginStatus={props.useLoginStatus} />
+      <Header
+        useLoginStatus={props.useLoginStatus}
+        useApps={useApps}
+        apps={apps}
+      />
       <Container maxW='container.lg' centerContent>
-        Welcome to DroneZone!
+        <h1>Nektr</h1>
+        <br />
+        <br />
       </Container>
       <Table variant='simple'>
         <Thead>
@@ -60,37 +95,19 @@ export default function Display(props) {
             <Th>Priority</Th>
           </Tr>
         </Thead>
-        <Tbody>
-          <Tr onClick={openModal}>
-            <Th>Apple</Th>
-            <Th>Senior Engineer</Th>
-            <Th>Applied</Th>
-            <Th>6/7/2021</Th>
-            <Th>2</Th>
-          </Tr>
-        </Tbody>
+        {/* if apps has been populated, fill table */}
+        <Tbody>{apps.length > 0 && fillTable()}</Tbody>
       </Table>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {modal.role} at {modal.company}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {modal.status}
-            <br />
-            {modal.dateApplied}
-            <br />
-            {modal.priority}
-            <br />
-            {modal.notes}
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+
+      <DisplayModal
+        isOpen={isOpen}
+        onClose={onClose}
+        modalEdit={modalEdit}
+        useModalEdit={useModalEdit}
+        modal={modal}
+        apps={apps}
+        useApps={useApps}
+      />
     </Container>
   );
 }
