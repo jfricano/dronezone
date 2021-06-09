@@ -7,9 +7,15 @@ const {
   deleteJobApp,
   updateJobApp
 } = require("./controllers/jobAppController");
+const {
+  addUser,
+  verifyUser,
+  setCookie,
+  verifyCookie
+} = require('./controllers/userController')
 
-const app = express();
 const { PORT } = process.env;
+const app = express();
 
 // parsers
 // app.use(cookieParser());
@@ -17,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // serve static files
-app.use(express.static(path.resolve(__dirname, "./public")));
+// app.use(express.static(path.resolve(__dirname, "../public")));
 app.use(express.static(path.resolve(__dirname, "../dist")));
 
 // home / landing page
