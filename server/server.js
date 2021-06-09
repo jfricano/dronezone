@@ -5,6 +5,7 @@ const {
   getAllJobApps,
   addJobApp,
   deleteJobApp,
+  updateJobApp
 } = require("./controllers/jobAppController");
 
 const app = express();
@@ -80,29 +81,18 @@ app.post("/dashboard", addJobApp, (req, res) =>
   res.status(200).json(res.locals.newJobApp)
 );
 
-// delete an application
-// DELETE
-// req.params (_id)
-// update the database
-// upon success, RES: application id for success
-// upon failure, RES: null for failure
+/**
+ * RESPONDS with _id of the deleted job application (null if nothing to delete)
+ */
 app.delete("/:jobAppId", deleteJobApp, (req, res) =>
   res.status(200).json(res.locals.deletedJobAppId)
 );
 
-// update an application
-// PUT
-// req.params(_id)
-// req.body:  JSON object consisting of CHANGED data
-// update the database
-// upon success, RES: updated JSON object from dBase
-// upon failure, RES: null
+// RESPONDS with updated record
 app.put(
   "/:jobAppId",
-  /* <some middleware> */
-  (req, res) => {
-    res.status(200).json(res.locals.jobApp);
-  }
+  updateJobApp,
+  (req, res) => res.status(200).json(res.locals.updatedJobApp)
 );
 
 // default route

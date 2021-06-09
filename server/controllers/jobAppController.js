@@ -2,12 +2,6 @@ const db = require("../database/dbModels");
 const TABLE_NAME = "job_apps";
 
 // TODO - UPDATE THIS ONCE COOKIES AND SESSIONS ARE WORKING
-/**
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- */
 const getAllJobApps = (req, res, next) => {
   // const { ssid } = req.cookies;
   // const queryString = `
@@ -35,12 +29,6 @@ const getAllJobApps = (req, res, next) => {
 };
 
 // TODO - UPDATE THIS ONCE SESSIONS AND COOKIES ARE WORKING
-/**
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- */
 const addJobApp = (req, res, next) => {
   // const user_id = req.cookies.ssid;
   const user_id = Math.ceil(Math.random() * 4);
@@ -48,6 +36,7 @@ const addJobApp = (req, res, next) => {
   const queryParams = [];
   let queryString = "";
 
+  // construct the query string
   try {
     queryString += `INSERT INTO ${TABLE_NAME} (`;
     for (let i = 0; i < queryFields.length; i++) {
@@ -75,13 +64,7 @@ const addJobApp = (req, res, next) => {
     );
 };
 
-/**
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- */
- deleteJobApp = (req, res, next) => {
+deleteJobApp = (req, res, next) => {
   const queryString = `DELETE FROM ${TABLE_NAME} WHERE ${TABLE_NAME}._id = ${req.params.jobAppId} RETURNING *`;
 
   db.query(queryString)
@@ -98,4 +81,27 @@ const addJobApp = (req, res, next) => {
     );
 };
 
-module.exports = { getAllJobApps, addJobApp, deleteJobApp };
+updateJobApp = (req, res, next) => {
+  let queryString = "";
+
+  // construct query string
+  try {
+    queryString += `UPDATE ${TABLE_NAME} SET `;
+    for (const key in req.body) queryString += `${key} = '${req.body[key]}', `;
+    queryString = queryString.trim().replace(/(^,)|(,$)/g, " ");
+    queryString += `WHERE ${TABLE_NAME}._id = ${req.params.jobAppId} RETURNING *`;
+  } catch (err) {
+    console.log(err);
+  }
+
+  db.query(queryString)
+    .then((data) => {
+      res.locals.udpatedJobApp = data.rows[0];
+      next();
+    })
+    .catch((err) =>
+      next({ log: err, err: "ERROR in jobAppController.updateJobApp" })
+    );
+};
+
+module.exports = { getAllJobApps, addJobApp, deleteJobApp, updateJobApp };
