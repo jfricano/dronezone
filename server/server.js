@@ -41,11 +41,11 @@ app.get("/", (req, res) => {
 // REQ.body:  username, password (bcrypt)
 // on success, RES: new User's record as object
 // on fail for user already exists, RES:  null (other failures, too short or no uname or pword, handled by frontend)
-app.post(
-  "/signup",
-  /* <some middleware */
-  (req, res) => res.status(200).json(res.locals.user)
-);
+// app.post(
+//   "/signup",
+//   /* <some middleware */
+//   (req, res) => res.status(200).json(res.locals.user)
+// );
 
 // login / authenticate using oAuth
 // REQ.body:  username, password (bcrypt)
@@ -58,6 +58,8 @@ app.get(
     res.status(200).json(res.locals.user);
   }
 );
+
+app.post('/login', /* middleware */ (req, res) => res.status(200))
 
 // IS LOGOUT ROUTE EVEN NECESSARY?? CAN SIMPLY UPDATE STATE ON FRONTEND
 // WHAT DOES BACKEND NEED TO DO? AND WHAT SHOULD RESPONSE BE??
