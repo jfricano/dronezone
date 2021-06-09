@@ -108,7 +108,8 @@ updateJobApp = (req, res, next) => {
 
   db.query(queryString)
     .then((data) => {
-      res.locals.udpatedJobApp = data.rows[0];
+      console.log(data.rows);
+      res.locals.updatedJobApp = data.rows[0];
       next();
     })
     .catch((err) =>
