@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // serve static files
-app.use(express.static(path.resolve(__dirname, "./public")));
+// app.use(express.static(path.resolve(__dirname, "../public")));
 app.use(express.static(path.resolve(__dirname, "../dist")));
 
 // home / landing page
