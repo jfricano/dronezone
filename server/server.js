@@ -1,7 +1,7 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
-const jobAppController = require('./controllers/jobAppController');
+const { getAllJobApps, addJobApp } = require("./controllers/jobAppController");
 
 const app = express();
 const { PORT } = process.env;
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // serve static files
-app.use(express.static(path.resolve(__dirname, './public')));
+app.use(express.static(path.resolve(__dirname, "./public")));
 app.use(express.static(path.resolve(__dirname, "../dist")));
 
 // home / landing page
@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
 // on success, RES: new User's record as object
 // on fail for user already exists, RES:  null (other failures, too short or no uname or pword, handled by frontend)
 app.post(
-  '/signup',
+  "/signup",
   /* <some middleware */
   (req, res) => res.status(200).json(res.locals.user)
 );
@@ -41,7 +41,7 @@ app.post(
 // on successful login, RES:  array of all of that user's applications
 // on failed loging, RES: null
 app.get(
-  '/login',
+  "/login",
   /* <some middleware> */
   (req, res) => {
     res.status(200).json(res.locals.user);
@@ -53,7 +53,7 @@ app.get(
 // logout
 // RES: redirect to home page
 app.get(
-  '/logout',
+  "/logout",
   /* <some middleware> */
   (req, res) => {
     // res.redirect('/');
@@ -62,27 +62,18 @@ app.get(
 );
 
 // MAIN APP / JOB APPLICATION MANAGEMENT ------------
-app.get(
-  "/dashboard",
-  /* <some middleware> */
-  (req, res) => {
-    res.status(200).json(res.locals.allJobApps);
-  }
+/**
+ * RESPONDS with array of job application json objects
+ */
+app.get("/dashboard", getAllJobApps, (req, res) =>
+  res.status(200).json(res.locals.allJobApps)
 );
 
-// once in, routes for:
-// add a new application
-// POST
-// req.body:  { JSON object }
-// update the database
-// upon success, RES: the JSON object from dBase (including _id) to the frontend
-// upon failure, RES: null to frontend
-app.post(
-  '/dashboard',
-  /* <some middleware> */
-  (req, res) => {
-    res.status(200).json(res.locals.jobApp);
-  }
+/**
+ * RESPONDS with new job application json object
+ */
+app.post("/dashboard", addJobApp, (req, res) =>
+  res.status(200).json(res.locals.newJobApp)
 );
 
 // delete an application
@@ -92,11 +83,9 @@ app.post(
 // upon success, RES: application id for success
 // upon failure, RES: null for failure
 app.delete(
-  '/:jobAppId',
+  "/:jobAppId",
   /* <some middlware> */
-  (req, res) => {
-    res.status(200).json(res.locals.deletedJobAppId); // null if error
-  }
+  (req, res) => res.status(200).json(res.locals.deletedJobAppId)
 );
 
 // update an application
@@ -107,7 +96,7 @@ app.delete(
 // upon success, RES: updated JSON object from dBase
 // upon failure, RES: null
 app.put(
-  '/:jobAppId',
+  "/:jobAppId",
   /* <some middleware> */
   (req, res) => {
     res.status(200).json(res.locals.jobApp);
@@ -115,14 +104,14 @@ app.put(
 );
 
 // default route
-app.use((req, res) => res.status(404).send('page not found'));
+app.use((req, res) => res.status(404).send("page not found"));
 
 // error route
 app.use((err, req, res, next) => {
   const defaultErr = {
-    log: 'Express error handler caught unknown middleware error',
+    log: "Express error handler caught unknown middleware error",
     status: 500,
-    message: { err: 'An error occurred' },
+    message: { err: "An error occurred" },
   };
   const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);
