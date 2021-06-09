@@ -21,7 +21,6 @@ const getAllJobApps = (req, res, next) => {
 
   db.query(queryString)
     .then((data) => {
-      console.log(data);
       res.locals.allJobApps = data.rows;
       next();
     })
