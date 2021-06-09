@@ -7,9 +7,15 @@ const {
   deleteJobApp,
   updateJobApp
 } = require("./controllers/jobAppController");
+const {
+  addUser,
+  verifyUser,
+  setCookie,
+  verifyCookie
+} = require('./controllers/userController')
 
-const app = express();
 const { PORT } = process.env;
+const app = express();
 
 // parsers
 // app.use(cookieParser());
