@@ -1,5 +1,5 @@
 #!/bin/bash
 cd /tmp/
 npm install
-PORT=$PORT PG_URI=$PG_URI server/server.js
+PORT=${PORT} PG_URI=${PG_URI} server/server.js
 
