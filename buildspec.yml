@@ -15,8 +15,13 @@ phases:
 # Include only the files required for your application to run.
 artifacts:
   files:
+    - appspec.yml
     - index.js
-    - dist/**/*
-    - request-map.js
-    - credentials.json
+    - client/**/*
+    - public/**/*
+    - scripts/**/*
+    - server/**/*
+    - webpack.config.js
+    - package.json
+    - package-lock.json
     - node_modules/**/*
