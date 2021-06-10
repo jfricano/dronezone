@@ -36,18 +36,18 @@ export default function Display(props) {
   // use effect to make fetch request to back end for initial list of array items
   useEffect(() => {
     // should be returning results of fetch request, hopefully an array?
-    axios.get('/dashboard').then((res) => {
+    axios.post('/dashboard', { email: props.email }).then((res) => {
       const tempArr = [];
       const idArr = [];
       res.data.forEach((app) => {
         idArr.push(app._id);
         tempArr.push(
           <Tr onClick={() => openModal(app)}>
-            <Th style={{ color: '#292929' }}>{app.company}</Th>
-            <Th style={{ color: '#292929' }}>{app.role}</Th>
-            <Th style={{ color: '#292929' }}>{app.status}</Th>
-            <Th style={{ color: '#292929' }}>{app.date_applied}</Th>
-            <Th style={{ color: '#292929' }}>{app.priority}</Th>
+            <Th>{app.company}</Th>
+            <Th>{app.role}</Th>
+            <Th>{app.status}</Th>
+            <Th>{app.date_applied}</Th>
+            <Th>{app.priority}</Th>
           </Tr>
         );
       });
@@ -67,7 +67,7 @@ export default function Display(props) {
         openModal={openModal}
       />
       <Container maxW='container.lg' centerContent>
-        <div style={{ textAlign: 'center', color: '#292929' }}>
+        <div style={{ textAlign: 'center' }}>
           <h1
             style={{
               fontSize: '35px',
@@ -160,7 +160,6 @@ export default function Display(props) {
         ids={ids}
         openModal={openModal}
         useIds={useIds}
-        email={props.email}
       />
     </Container>
   );

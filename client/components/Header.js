@@ -37,8 +37,10 @@ export default function Header(props) {
     const priority = document.getElementById('priority').value;
     const notes = document.getElementById('notes').value;
     const link = document.getElementById('link').value;
+    const email = props.email;
 
     const reqBody = {
+      email,
       company,
       role,
       status,
@@ -48,7 +50,7 @@ export default function Header(props) {
       link,
     };
     // empty strings, undefined, falsy value
-    axios.post('/dashboard', reqBody).then((res) => {
+    axios.post('/addApplication', reqBody).then((res) => {
       // do something with returned ID
       const tempApps = props.apps;
       tempApps.push(
@@ -145,7 +147,7 @@ export default function Header(props) {
               ></textarea>
               <div style={{ textAlign: 'right' }}>
                 <Button
-                  style={{ color: '#292929', borderColor: '#ffc815' }}
+                  style={{ borderColor: '#ffc815' }}
                   type='submit'
                   variant='outline'
                   onClick={(e) => handleApp(e)}
@@ -154,7 +156,7 @@ export default function Header(props) {
                 </Button>
                 <Button
                   onClick={onClose}
-                  style={{ backgroundColor: '#ffc815', color: '#292929' }}
+                  style={{ backgroundColor: '#ffc815' }}
                 >
                   Close
                 </Button>
@@ -165,26 +167,19 @@ export default function Header(props) {
       </Modal>
       {/* Menu button for Add App and Logout */}
       <img src={logo} />
-      <Menu style={{ color: '#292929', borderColor: '#ffc815' }}>
+      <Menu style={{ borderColor: '#ffc815' }}>
         <MenuButton
           as={IconButton}
           aria-label='Options'
           icon={<HamburgerIcon />}
-          style={{ color: '#292929', borderColor: '#ffc815' }}
+          style={{ borderColor: '#ffc815' }}
           variant='outline'
         >
           Navigation
         </MenuButton>
         <MenuList style={{ borderColor: '#ffc815' }}>
-          <MenuItem onClick={onOpen} style={{ color: '#292929' }}>
-            Add an Application
-          </MenuItem>
-          <MenuItem
-            onClick={() => props.useEmail(null)}
-            style={{ color: '#292929' }}
-          >
-            Log Out
-          </MenuItem>
+          <MenuItem onClick={onOpen}>Add an Application</MenuItem>
+          <MenuItem onClick={() => props.useEmail(null)}>Log Out</MenuItem>
         </MenuList>
       </Menu>
       <Button
@@ -192,7 +187,6 @@ export default function Header(props) {
         variant='outline'
         style={{
           margin: '0px 5px 0px 5px',
-          color: '#292929',
           borderColor: '#ffc815',
         }}
       >
