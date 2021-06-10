@@ -9,13 +9,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh '''#!/bin/sh
-node --version
-npm --version
-npm get registry
-echo
-echo "Installing Node Modules"
-npm install --verbose'''
+        sh 'npm install --verbose'
       }
     }
 
