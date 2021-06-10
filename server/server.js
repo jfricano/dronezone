@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const {
   getAllJobApps,
   addJobApp,
@@ -16,6 +16,7 @@ const {
   setCookie,
   verifyCookie,
 } = require("./controllers/userController");
+const db = require("./database/dbModels");
 
 const { PORT, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 const app = express();
@@ -24,26 +25,63 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // serve static files
 // app.use(express.static(path.resolve(__dirname, "../public")));
 app.use("/dist", express.static(path.resolve(__dirname, "../dist")));
 
 // google OAuth
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "/login/callback",
-    },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOrCreate({ googleId: profile.id }, (err, user) => {
-        return done(err, user);
-      });
+// passport.use(
+//   new GoogleStrategy(
+//     {
+//       clientID: GOOGLE_CLIENT_ID,
+//       clientSecret: GOOGLE_CLIENT_SECRET,
+//       callbackURL: "/login/callback",
+//     },
+//     (accessToken, refreshToken, profile, done) => {
+//       User.findOrCreate({ googleId: profile.id }, (err, user) => {
+//         return done(err, user);
+//       });
+//     }
+//   )
+// );
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL
+},
+function(accessToken, refreshToken, profile, cb) {
+  console.log("in google strategy")
+  const email = profile._json.email; 
+  console.log(email) 
+  const params = [email]
+  console.log(params[0])  
+  const queryString = `INSERT INTO users (email) VALUES ($1) ON CONFLICT DO NOTHING`
+  db.query(queryString, params, (err, res) => {
+    console.log('in db query')
+    if (err) {
+      console.log("error creating user", err);
+      
+    } else {
+      console.log("successfully inserted new registered user row");
+      console.log(params[0]);
+      
     }
-  )
-);
+  })
+  
+  return cb(null, profile);
+}
+));
 
 // home / landing page
 app.get("/", (req, res) => {
@@ -53,18 +91,31 @@ app.get("/", (req, res) => {
 // USER MANAGEMENT ------------
 
 // app.get('/login', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+// app.get(
+//   "/login",
+//   passport.authenticate("google", {
+//     scope: ["https://www.googleapis.com/auth/plus.login"],
+//   })
+// );
+
+// app.get(
+//   "/login/callback",
+//   passport.authenticate("google", { failureRedirect: "/" }),
+//   (req, res) => res.redirect("/dashboard")
+// );
 app.get(
   "/login",
-  passport.authenticate("google", {
-    scope: ["https://www.googleapis.com/auth/plus.login"],
-  })
+  passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
-app.get(
-  "login/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
-  (req, res) => res.redirect("/dashboard")
+app.get("/login/callback", passport.authenticate('google', {successRedirect: '/dashboard', failureRedirect: '/' }),
+  function(req, res, next){
+    console.log('redirecting...')
+    res.redirect('http://localhost:8080/dashboard');
+    
+  }
 );
+
 // I don't think we need a GET to '/signup' ?
 // it seems this could be handled with React Router
 // i.e., no data is needed
