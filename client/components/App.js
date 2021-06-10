@@ -17,7 +17,7 @@ export default function App() {
 
   return (
     <ChakraProvider theme={theme} resetCSS='true'>
-      <Box className='outer-container' bg='blue'>
+      <Box className='outer-container'>
         {loginStatus ? (
           <Display useLoginStatus={useLoginStatus} />
         ) : (
