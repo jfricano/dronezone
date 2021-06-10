@@ -37,8 +37,10 @@ export default function Header(props) {
     const priority = document.getElementById('priority').value;
     const notes = document.getElementById('notes').value;
     const link = document.getElementById('link').value;
+    const email = props.email;
 
     const reqBody = {
+      email,
       company,
       role,
       status,
@@ -48,7 +50,7 @@ export default function Header(props) {
       link,
     };
     // empty strings, undefined, falsy value
-    axios.post('/dashboard', reqBody).then((res) => {
+    axios.post('/addApplication', reqBody).then((res) => {
       // do something with returned ID
       const tempApps = props.apps;
       tempApps.push(

@@ -36,7 +36,7 @@ export default function Display(props) {
   // use effect to make fetch request to back end for initial list of array items
   useEffect(() => {
     // should be returning results of fetch request, hopefully an array?
-    axios.get('/dashboard').then((res) => {
+    axios.post('/dashboard', { email: props.email }).then((res) => {
       const tempArr = [];
       const idArr = [];
       res.data.forEach((app) => {
@@ -160,7 +160,6 @@ export default function Display(props) {
         ids={ids}
         openModal={openModal}
         useIds={useIds}
-        email={props.email}
       />
     </Container>
   );
