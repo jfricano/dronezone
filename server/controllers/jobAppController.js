@@ -1,5 +1,5 @@
-const db = require("../database/dbModels");
-const TABLE_NAME = "job_apps";
+const db = require('../database/dbModels');
+const TABLE_NAME = 'job_apps';
 
 // TODO - UPDATE THIS ONCE COOKIES AND SESSIONS ARE WORKING
 /**
@@ -7,16 +7,25 @@ const TABLE_NAME = "job_apps";
  * accepts req.cookies.ssid to identify user
  * assigns to res.locals.allJobApps an array of job application json objects
  */
-const getAllJobApps = (req, res, next) => {
+const getAllJobApps = async (req, res, next) => {
   // const { ssid } = req.cookies;
   // const queryString = `
   //   SELECT * FROM job_apps
   //   WHERE job_apps.user_id = ${ssid}
   // `;
 
+  const userEmail = req.body.email;
+
+  const userIDString = `SELECT * FROM users WHERE email='${userEmail}'`;
+
+  const userID = await db
+    .query(userIDString)
+    .then((res) => res.rows[0]._id)
+    .catch((err) => console.log(err));
+
   const queryString = `
     SELECT * FROM ${TABLE_NAME}
-    WHERE ${TABLE_NAME}.user_id = 1
+    WHERE ${TABLE_NAME}.user_id = ${userID}
   `;
 
   db.query(queryString)
@@ -25,7 +34,7 @@ const getAllJobApps = (req, res, next) => {
       next();
     })
     .catch((err) =>
-      next({ log: err, err: "ERROR in jobAppController.getAllJobApps" })
+      next({ log: err, err: 'ERROR in jobAppController.getAllJobApps' })
     );
 };
 
@@ -36,26 +45,35 @@ const getAllJobApps = (req, res, next) => {
  * accepts req.body to populate the record
  * assigns to res.locals.newJobApp the new job application object
  */
-const addJobApp = (req, res, next) => {
+const addJobApp = async (req, res, next) => {
   // const user_id = req.cookies.ssid;
-  const user_id = Math.ceil(Math.random() * 4);
+  const userEmail = req.body.email;
+
+  const userIDString = `SELECT * FROM users WHERE email='${userEmail}'`;
+
+  const userID = await db
+    .query(userIDString)
+    .then((res) => res.rows[0]._id)
+    .catch((err) => console.log(err));
+
+  delete req.body.email;
+
   const queryFields = Object.keys(req.body);
   const queryParams = [];
-  let queryString = "";
+  let queryString = '';
 
   // construct the query string
   try {
     queryString += `INSERT INTO ${TABLE_NAME} (`;
     for (let i = 0; i < queryFields.length; i++) {
-      queryString += queryFields[i] + ", ";
+      queryString += queryFields[i] + ', ';
       queryParams.push(req.body[queryFields[i]]);
     }
-    queryString += "user_id) VALUES (";
+    queryString += 'user_id) VALUES (';
     for (let i = 0; i < queryParams.length; i++)
       queryString += `'${queryParams[i]}', `;
-    queryString += `${user_id}) RETURNING *`;
-  } 
-  catch (err) {
+    queryString += `${userID}) RETURNING *`;
+  } catch (err) {
     console.log(err);
   }
 
@@ -65,7 +83,7 @@ const addJobApp = (req, res, next) => {
       next();
     })
     .catch((err) =>
-      next({ log: err, err: "ERROR in jobAppController.addJobApp" })
+      next({ log: err, err: 'ERROR in jobAppController.addJobApp' })
     );
 };
 
@@ -84,7 +102,7 @@ deleteJobApp = (req, res, next) => {
       next();
     })
     .catch((err) =>
-      next({ log: err, err: "ERROR in jobAppController.deleteJobApp" })
+      next({ log: err, err: 'ERROR in jobAppController.deleteJobApp' })
     );
 };
 
@@ -94,13 +112,13 @@ deleteJobApp = (req, res, next) => {
  * assigns updated record as res.locals.updatedJobApp
  */
 updateJobApp = (req, res, next) => {
-  let queryString = "";
+  let queryString = '';
 
   // construct query string
   try {
     queryString += `UPDATE ${TABLE_NAME} SET `;
     for (const key in req.body) queryString += `${key} = '${req.body[key]}', `;
-    queryString = queryString.trim().replace(/(^,)|(,$)/g, " ");
+    queryString = queryString.trim().replace(/(^,)|(,$)/g, ' ');
     queryString += `WHERE ${TABLE_NAME}._id = ${req.params.jobAppId} RETURNING *`;
   } catch (err) {
     console.log(err);
@@ -112,7 +130,7 @@ updateJobApp = (req, res, next) => {
       next();
     })
     .catch((err) =>
-      next({ log: err, err: "ERROR in jobAppController.updateJobApp" })
+      next({ log: err, err: 'ERROR in jobAppController.updateJobApp' })
     );
 };
 

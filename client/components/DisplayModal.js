@@ -181,7 +181,6 @@ export default function DisplayModal(props) {
               <Button
                 variant='outline'
                 style={{
-                  color: '#292929',
                   borderColor: '#ffc815',
                 }}
                 onClick={() => {
@@ -196,7 +195,7 @@ export default function DisplayModal(props) {
                   props.useModalEdit(false);
                   props.onClose();
                 }}
-                style={{ backgroundColor: '#ffc815', color: '#292929' }}
+                style={{ backgroundColor: '#ffc815' }}
               >
                 Close
               </Button>
@@ -204,14 +203,14 @@ export default function DisplayModal(props) {
           ) : (
             <div>
               <Button
-                style={{ color: '#292929', borderColor: '#ffc815' }}
+                style={{ borderColor: '#ffc815' }}
                 variant='outline'
                 onClick={() => props.useModalEdit(true)}
               >
                 Edit Application
               </Button>{' '}
               <Button
-                style={{ color: '#292929', borderColor: '#ffc815' }}
+                style={{ borderColor: '#ffc815' }}
                 variant='outline'
                 onClick={() => deleteApp(props.modal._id)}
               >
