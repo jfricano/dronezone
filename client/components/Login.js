@@ -5,7 +5,7 @@ export default function Login(props) {
   return (
     <Container centerContent className='login-container'>
       <Button onClick={() => props.useLoginStatus(true)}>
-        Log in with Googdfdsale
+        Log in with Google
       </Button>
     </Container>
   );
