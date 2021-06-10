@@ -76,14 +76,23 @@ export default function DisplayModal(props) {
     <Modal isOpen={props.isOpen} onClose={props.onClose} size='xl'>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
+        <ModalHeader
+          style={{
+            fontSize: '25px',
+            fontWeight: 'bold',
+            color: '#ffc815',
+          }}
+        >
           {props.modal.role} at {props.modal.company}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {props.modalEdit ? (
             <div>
-              <label>Name of the Company</label>
+              <label>
+                {' '}
+                <b>Name of the Company</b>
+              </label>
               <br />
               <input
                 type='text'
@@ -92,11 +101,17 @@ export default function DisplayModal(props) {
                 required
               />
               <br /> <br />
-              <label>Role you Applied For</label>
+              <label>
+                {' '}
+                <b>Role you Applied For</b>
+              </label>
               <br />
               <input type='text' id='role' defaultValue={props.modal.role} />
               <br /> <br />
-              <label>Select Application Status</label>
+              <label>
+                {' '}
+                <b>Select Application Status</b>
+              </label>
               <br />
               <select
                 name='status'
@@ -110,7 +125,10 @@ export default function DisplayModal(props) {
                 <option value='offer'>Offer Received</option>
               </select>
               <br /> <br />
-              <label>Date you Applied</label>
+              <label>
+                {' '}
+                <b>Date you Applied</b>
+              </label>
               <br />
               <input
                 type='date'
@@ -119,7 +137,7 @@ export default function DisplayModal(props) {
               />
               <br /> <br />
               <label>
-                Priority - level 1 (low), level 2, or level 3 (high)
+                <b>Priority - level 1 (low), level 2, or level 3 (high)</b>
               </label>
               <br />
               <input
@@ -129,14 +147,19 @@ export default function DisplayModal(props) {
               />
               <br />
               <br />
-              <label>Add a Link to the Posting</label> <br />
+              <label>
+                <b>Add a Link to the Posting</b>
+              </label>{' '}
+              <br />
               <input
                 type='text'
                 id='link'
                 defaultValue={props.modal.link}
               />{' '}
               <br /> <br />
-              <label>Notes regarding Application</label>
+              <label>
+                <b>Notes regarding Application</b>
+              </label>
               <br />
               <textarea id='notes' defaultValue={props.modal.notes}></textarea>
             </div>
@@ -156,7 +179,11 @@ export default function DisplayModal(props) {
           {props.modalEdit ? (
             <div>
               <Button
-                variant='ghost'
+                variant='outline'
+                style={{
+                  color: '#292929',
+                  borderColor: '#ffc815',
+                }}
                 onClick={() => {
                   updateApp(props.modal._id);
                   props.useModalEdit(false);
@@ -169,22 +196,33 @@ export default function DisplayModal(props) {
                   props.useModalEdit(false);
                   props.onClose();
                 }}
+                style={{ backgroundColor: '#ffc815', color: '#292929' }}
               >
                 Close
               </Button>
             </div>
           ) : (
             <div>
-              <Button variant='ghost' onClick={() => props.useModalEdit(true)}>
+              <Button
+                style={{ color: '#292929', borderColor: '#ffc815' }}
+                variant='outline'
+                onClick={() => props.useModalEdit(true)}
+              >
                 Edit Application
               </Button>{' '}
               <Button
-                variant='ghost'
+                style={{ color: '#292929', borderColor: '#ffc815' }}
+                variant='outline'
                 onClick={() => deleteApp(props.modal._id)}
               >
                 Delete Application
               </Button>{' '}
-              <Button onClick={props.onClose}>Close</Button>
+              <Button
+                onClick={props.onClose}
+                style={{ backgroundColor: '#ffc815', color: '#292929' }}
+              >
+                Close
+              </Button>
             </div>
           )}
         </ModalFooter>

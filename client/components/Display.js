@@ -10,7 +10,6 @@ import {
   Th,
 } from '@chakra-ui/react';
 import DisplayModal from './DisplayModal';
-import logo from '../../public/nektr-light-trans.png';
 import axios from 'axios';
 
 export default function Display(props) {
@@ -73,11 +72,11 @@ export default function Display(props) {
               fontSize: '35px',
               fontWeight: 'bold',
               color: '#ffc815',
-              WebkitTextStrokeColor: 'black',
-              WebkitTextStrokeWidth: '1px',
+              // WebkitTextStrokeColor: 'black',
+              // WebkitTextStrokeWidth: '1px',
             }}
           >
-            Welcome to Nektr
+            Welcome to nektr
           </h1>
           <br />
           If you would like to add a new application, please select the menu on
@@ -92,13 +91,57 @@ export default function Display(props) {
       <Table variant='simple'>
         <Thead>
           <Tr>
-            <Th style={{ color: '#ffc815', fontWeight: 'bolder' }}>
+            <Th
+              style={{
+                fontSize: '15px',
+                color: '#ffc815',
+                fontWeight: 'bolder',
+                // WebkitTextStrokeColor: 'black',
+                // WebkitTextStrokeWidth: '0.5px',
+              }}
+            >
               Company Name
             </Th>
-            <Th style={{ color: '#ffc815' }}>Role</Th>
-            <Th style={{ color: '#ffc815' }}>Status</Th>
-            <Th style={{ color: '#ffc815' }}>Date Applied</Th>
-            <Th style={{ color: '#ffc815' }}>Priority</Th>
+            <Th
+              style={{
+                fontSize: '15px',
+                color: '#ffc815',
+                // WebkitTextStrokeColor: 'black',
+                // WebkitTextStrokeWidth: '0.5px',
+              }}
+            >
+              Role
+            </Th>
+            <Th
+              style={{
+                fontSize: '15px',
+                color: '#ffc815',
+                // WebkitTextStrokeColor: 'black',
+                // WebkitTextStrokeWidth: '0.5px',
+              }}
+            >
+              Status
+            </Th>
+            <Th
+              style={{
+                fontSize: '15px',
+                color: '#ffc815',
+                // WebkitTextStrokeColor: 'black',
+                // WebkitTextStrokeWidth: '0.5px',
+              }}
+            >
+              Date Applied
+            </Th>
+            <Th
+              style={{
+                fontSize: '15px',
+                color: '#ffc815',
+                // WebkitTextStrokeColor: 'black',
+                // WebkitTextStrokeWidth: '0.5px',
+              }}
+            >
+              Priority
+            </Th>
           </Tr>
         </Thead>
         <Tbody>{apps}</Tbody>
