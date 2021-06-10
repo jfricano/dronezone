@@ -122,7 +122,7 @@ app.get(
   async function (req, res, next) {
     console.log('redirecting...');
     res.cookie('email', returnEmail);
-    res.redirect('http://localhost:8080/');
+    res.redirect('/');
   }
 );
 
