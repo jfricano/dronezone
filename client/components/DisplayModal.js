@@ -38,6 +38,7 @@ export default function DisplayModal(props) {
     const priority = document.getElementById('priority').value;
     const notes = document.getElementById('notes').value;
     const link = document.getElementById('link').value;
+    const email = props.email;
 
     const modalUpdate = {
       ...props.modal,

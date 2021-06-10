@@ -171,14 +171,14 @@ app.get(
 /**
  * RESPONDS with array of job application json objects
  */
-app.get('/dashboard', getAllJobApps, (req, res) =>
+app.post('/dashboard', getAllJobApps, (req, res) =>
   res.status(200).json(res.locals.allJobApps)
 );
 
 /**
  * RESPONDS with new job application json object
  */
-app.post('/dashboard', addJobApp, (req, res) =>
+app.post('/addApplication', addJobApp, (req, res) =>
   res.status(200).json(res.locals.newJobApp)
 );
 
