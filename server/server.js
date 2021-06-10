@@ -1,22 +1,22 @@
-require("dotenv").config();
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const passport = require("passport");
+require('dotenv').config();
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const {
   getAllJobApps,
   addJobApp,
   deleteJobApp,
   updateJobApp,
-} = require("./controllers/jobAppController");
+} = require('./controllers/jobAppController');
 const {
   addUser,
   verifyUser,
   setCookie,
   verifyCookie,
-} = require("./controllers/userController");
-const db = require("./database/dbModels");
+} = require('./controllers/userController');
+const db = require('./database/dbModels');
 
 const { PORT, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 const app = express();
@@ -25,11 +25,11 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
@@ -38,7 +38,7 @@ app.use(passport.session());
 
 // serve static files
 // app.use(express.static(path.resolve(__dirname, "../public")));
-app.use("/dist", express.static(path.resolve(__dirname, "../dist")));
+app.use('/dist', express.static(path.resolve(__dirname, '../dist')));
 
 // google OAuth
 // passport.use(
@@ -55,37 +55,42 @@ app.use("/dist", express.static(path.resolve(__dirname, "../dist")));
 //     }
 //   )
 // );
-passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: process.env.GOOGLE_CALLBACK_URL
-},
-function(accessToken, refreshToken, profile, cb) {
-  console.log("in google strategy")
-  const email = profile._json.email; 
-  console.log(email) 
-  const params = [email]
-  console.log(params[0])  
-  const queryString = `INSERT INTO users (email) VALUES ($1) ON CONFLICT DO NOTHING`
-  db.query(queryString, params, (err, res) => {
-    console.log('in db query')
-    if (err) {
-      console.log("error creating user", err);
-      
-    } else {
-      console.log("successfully inserted new registered user row");
+
+let returnEmail;
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    },
+    function (accessToken, refreshToken, profile, cb) {
+      console.log('in google strategy');
+      const email = profile._json.email;
+      returnEmail = email;
+      console.log(email);
+      const params = [email];
       console.log(params[0]);
-      
+      const queryString = `INSERT INTO users (email) VALUES ($1) ON CONFLICT DO NOTHING`;
+      db.query(queryString, params, (err, res) => {
+        console.log('in db query');
+        if (err) {
+          console.log('error creating user', err);
+        } else {
+          console.log('successfully inserted new registered user row');
+          console.log(params[0]);
+        }
+      });
+
+      return cb(null, profile);
     }
-  })
-  
-  return cb(null, profile);
-}
-));
+  )
+);
 
 // home / landing page
-app.get("/", (req, res) => {
-  return res.sendFile(path.resolve(__dirname, "../public/index.html"));
+app.get('/', (req, res) => {
+  return res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
 
 // USER MANAGEMENT ------------
@@ -104,15 +109,20 @@ app.get("/", (req, res) => {
 //   (req, res) => res.redirect("/dashboard")
 // );
 app.get(
-  "/login",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  '/login',
+  passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 
-app.get("/login/callback", passport.authenticate('google', {successRedirect: '/dashboard', failureRedirect: '/' }),
-  function(req, res, next){
-    console.log('redirecting...')
-    res.redirect('http://localhost:8080/dashboard');
-    
+app.get(
+  '/login/callback',
+  passport.authenticate('google', {
+    // successRedirect: '/',
+    failureRedirect: '/',
+  }),
+  async function (req, res, next) {
+    console.log('redirecting...');
+    res.cookie('email', returnEmail);
+    res.redirect('http://localhost:8080/');
   }
 );
 
@@ -161,38 +171,38 @@ app.get("/login/callback", passport.authenticate('google', {successRedirect: '/d
 /**
  * RESPONDS with array of job application json objects
  */
-app.get("/dashboard", getAllJobApps, (req, res) =>
+app.get('/dashboard', getAllJobApps, (req, res) =>
   res.status(200).json(res.locals.allJobApps)
 );
 
 /**
  * RESPONDS with new job application json object
  */
-app.post("/dashboard", addJobApp, (req, res) =>
+app.post('/dashboard', addJobApp, (req, res) =>
   res.status(200).json(res.locals.newJobApp)
 );
 
 /**
  * RESPONDS with _id of the deleted job application (null if nothing to delete)
  */
-app.delete("/:jobAppId", deleteJobApp, (req, res) =>
+app.delete('/:jobAppId', deleteJobApp, (req, res) =>
   res.status(200).json(res.locals.deletedJobAppId)
 );
 
 // RESPONDS with updated record
-app.put("/:jobAppId", updateJobApp, (req, res) =>
+app.put('/:jobAppId', updateJobApp, (req, res) =>
   res.status(200).json(res.locals.updatedJobApp)
 );
 
 // default route
-app.use((req, res) => res.status(404).send("page not found"));
+app.use((req, res) => res.status(404).send('page not found'));
 
 // error route
 app.use((err, req, res, next) => {
   const defaultErr = {
-    log: "Express error handler caught unknown middleware error",
+    log: 'Express error handler caught unknown middleware error',
     status: 500,
-    message: { err: "An error occurred" },
+    message: { err: 'An error occurred' },
   };
   const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);
