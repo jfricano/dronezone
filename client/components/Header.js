@@ -20,6 +20,7 @@ import {
   useColorMode,
 } from '@chakra-ui/react';
 import axios from 'axios';
+import logo from '../../public/nektr-light-trans.png';
 
 import { HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 export default function Header(props) {
@@ -136,18 +137,25 @@ export default function Header(props) {
         </ModalContent>
       </Modal>
       {/* Menu button for Add App and Logout */}
-      <Menu>
+      <img src={logo} />
+      <Menu style={{ color: '#292929', borderColor: '#ffc815' }}>
         <MenuButton
           as={IconButton}
           aria-label='Options'
           icon={<HamburgerIcon />}
+          style={{ color: '#292929', borderColor: '#ffc815' }}
           variant='outline'
         >
           Navigation
         </MenuButton>
-        <MenuList>
-          <MenuItem onClick={onOpen}>Add an Application</MenuItem>
-          <MenuItem onClick={() => props.useLoginStatus(false)}>
+        <MenuList style={{ borderColor: '#ffc815' }}>
+          <MenuItem onClick={onOpen} style={{ color: '#292929' }}>
+            Add an Application
+          </MenuItem>
+          <MenuItem
+            onClick={() => props.useLoginStatus(false)}
+            style={{ color: '#292929' }}
+          >
             Log Out
           </MenuItem>
         </MenuList>
@@ -155,7 +163,11 @@ export default function Header(props) {
       <Button
         onClick={toggleColorMode}
         variant='outline'
-        style={{ margin: '0px 5px 0px 5px' }}
+        style={{
+          margin: '0px 5px 0px 5px',
+          color: '#292929',
+          borderColor: '#ffc815',
+        }}
       >
         {colorMode === 'dark' ? (
           <SunIcon style={{ marginRight: '10px' }} />

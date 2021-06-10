@@ -10,6 +10,7 @@ import {
   Th,
 } from '@chakra-ui/react';
 import DisplayModal from './DisplayModal';
+import logo from '../../public/nektr-light-trans.png';
 import axios from 'axios';
 
 export default function Display(props) {
@@ -43,11 +44,11 @@ export default function Display(props) {
         idArr.push(app._id);
         tempArr.push(
           <Tr onClick={() => openModal(app)}>
-            <Th>{app.company}</Th>
-            <Th>{app.role}</Th>
-            <Th>{app.status}</Th>
-            <Th>{app.date_applied}</Th>
-            <Th>{app.priority}</Th>
+            <Th style={{ color: '#292929' }}>{app.company}</Th>
+            <Th style={{ color: '#292929' }}>{app.role}</Th>
+            <Th style={{ color: '#292929' }}>{app.status}</Th>
+            <Th style={{ color: '#292929' }}>{app.date_applied}</Th>
+            <Th style={{ color: '#292929' }}>{app.priority}</Th>
           </Tr>
         );
       });
@@ -66,27 +67,38 @@ export default function Display(props) {
         openModal={openModal}
       />
       <Container maxW='container.lg' centerContent>
-        <h1 style={{ textAlign: 'center' }}>
-          Welcome to Nektr.
-          <br />
+        <div style={{ textAlign: 'center', color: '#292929' }}>
+          <h1
+            style={{
+              fontSize: '35px',
+              fontWeight: 'bold',
+              color: '#ffc815',
+              WebkitTextStrokeColor: 'black',
+              WebkitTextStrokeWidth: '1px',
+            }}
+          >
+            Welcome to Nektr
+          </h1>
           <br />
           If you would like to add a new application, please select the menu on
           the top left.
           <br />
           Below are your current applications. To see more details about, edit,
           or delete an application, please select it below.
-        </h1>
+        </div>
         <br />
         <br />
       </Container>
       <Table variant='simple'>
         <Thead>
           <Tr>
-            <Th>Company Name</Th>
-            <Th>Role</Th>
-            <Th>Status</Th>
-            <Th>Date Applied</Th>
-            <Th>Priority</Th>
+            <Th style={{ color: '#ffc815', fontWeight: 'bolder' }}>
+              Company Name
+            </Th>
+            <Th style={{ color: '#ffc815' }}>Role</Th>
+            <Th style={{ color: '#ffc815' }}>Status</Th>
+            <Th style={{ color: '#ffc815' }}>Date Applied</Th>
+            <Th style={{ color: '#ffc815' }}>Priority</Th>
           </Tr>
         </Thead>
         <Tbody>{apps}</Tbody>
