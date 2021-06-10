@@ -20,13 +20,13 @@ const { PORT, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 const app = express();
 
 // parsers
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // serve static files
 // app.use(express.static(path.resolve(__dirname, "../public")));
-app.use('/dist', express.static(path.resolve(__dirname, "../dist")));
+app.use("/dist", express.static(path.resolve(__dirname, "../dist")));
 
 // google OAuth
 passport.use(
@@ -34,7 +34,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "/dashboard",
+      callbackURL: "/login/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       User.findOrCreate({ googleId: profile.id }, (err, user) => {
@@ -52,8 +52,12 @@ app.get("/", (req, res) => {
 // USER MANAGEMENT ------------
 
 // app.get('/login', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
-app.get('/login', passport.authenticate('google'));
-
+app.get("/login", passport.authenticate("google"));
+app.get(
+  "login/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  (req, res) => res.redirect("/dashboard")
+);
 // I don't think we need a GET to '/signup' ?
 // it seems this could be handled with React Router
 // i.e., no data is needed
