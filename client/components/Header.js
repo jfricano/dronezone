@@ -180,7 +180,7 @@ export default function Header(props) {
             Add an Application
           </MenuItem>
           <MenuItem
-            onClick={() => props.useLoginStatus(false)}
+            onClick={() => props.useEmail(null)}
             style={{ color: '#292929' }}
           >
             Log Out
