@@ -4,7 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "server/server.js",
+    "start": "node server/server.js",
     "build": "NODE_ENV=production webpack",
     "server": "npm run build && npm start",
     "dev": "nodemon server/server.js & NODE_ENV=development webpack serve --open",
@@ -45,6 +45,7 @@
     "framer-motion": "^4.1.17",
     "passport": "^0.4.1",
     "passport-google-oauth": "^2.0.0",
+    "passport-google-oauth20": "^2.0.0",
     "pause": "^0.1.0",
     "pg": "^8.6.0",
     "postgres": "^1.0.2",
