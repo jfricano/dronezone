@@ -1,22 +1,22 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const {
   getAllJobApps,
   addJobApp,
   deleteJobApp,
-  updateJobApp
+  updateJobApp,
 } = require("./controllers/jobAppController");
 const {
   addUser,
   verifyUser,
   setCookie,
-  verifyCookie
-} = require('./controllers/userController')
+  verifyCookie,
+} = require("./controllers/userController");
 
-const { PORT } = process.env;
+const { PORT, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 const app = express();
 
 // parsers
@@ -27,6 +27,22 @@ app.use(express.urlencoded({ extended: true }));
 // serve static files
 // app.use(express.static(path.resolve(__dirname, "../public")));
 app.use(express.static(path.resolve(__dirname, "../dist")));
+
+// google OAuth
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: /* not sure what goes here */''
+    },
+    (accessToken, refreshToken, profile, done) => {
+      User.findOrCreate({ googleId: profile.id }, function (err, user) {
+        return done(err, user);
+      });
+    }
+  )
+);
 
 // home / landing page
 app.get("/", (req, res) => {
@@ -61,7 +77,7 @@ app.get(
   }
 );
 
-app.post('/login', /* middleware */ (req, res) => res.status(200))
+app.post("/login", /* middleware */ (req, res) => res.status(200));
 
 // IS LOGOUT ROUTE EVEN NECESSARY?? CAN SIMPLY UPDATE STATE ON FRONTEND
 // WHAT DOES BACKEND NEED TO DO? AND WHAT SHOULD RESPONSE BE??
@@ -99,10 +115,8 @@ app.delete("/:jobAppId", deleteJobApp, (req, res) =>
 );
 
 // RESPONDS with updated record
-app.put(
-  "/:jobAppId",
-  updateJobApp,
-  (req, res) => res.status(200).json(res.locals.updatedJobApp)
+app.put("/:jobAppId", updateJobApp, (req, res) =>
+  res.status(200).json(res.locals.updatedJobApp)
 );
 
 // default route
