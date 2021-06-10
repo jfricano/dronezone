@@ -70,11 +70,21 @@ export default function Header(props) {
       <Modal isOpen={isOpen} onClose={onClose} size='xl'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add an Application</ModalHeader>
+          <ModalHeader
+            style={{
+              fontSize: '25px',
+              fontWeight: 'bold',
+              color: '#ffc815',
+            }}
+          >
+            Add an Application
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form>
-              <label>Name of the Company</label>
+              <label>
+                <b>Name of the Company</b>
+              </label>
               <br />
               <input
                 type='text'
@@ -83,11 +93,15 @@ export default function Header(props) {
                 required
               />
               <br /> <br />
-              <label>Role you Applied For</label>
+              <label>
+                <b>Role you Applied For</b>
+              </label>
               <br />
               <input type='text' id='role' placeholder='Role' required />
               <br /> <br />
-              <label>Select Application Status</label>
+              <label>
+                <b>Select Application Status</b>
+              </label>
               <br />
               <select name='status' id='status' required>
                 <option value='applied'>Applied</option>
@@ -97,12 +111,14 @@ export default function Header(props) {
                 <option value='offer'>Offer Received</option>
               </select>
               <br /> <br />
-              <label>Date you Applied</label>
+              <label>
+                <b>Date you Applied</b>
+              </label>
               <br />
               <input type='date' id='date' required />
               <br /> <br />
               <label>
-                Priority - level 1 (low), level 2, or level 3 (high)
+                <b>Priority - level 1 (low), level 2, or level 3 (high)</b>
               </label>
               <br />
               <input
@@ -113,10 +129,15 @@ export default function Header(props) {
               />
               <br />
               <br />
-              <label>Add a Link to the Posting</label> <br />
+              <label>
+                <b>Add a Link to the Posting</b>
+              </label>{' '}
+              <br />
               <input type='text' placeholder='Link to posting' id='link' />{' '}
               <br /> <br />
-              <label>Notes regarding Application</label>
+              <label>
+                <b>Notes regarding Application</b>
+              </label>
               <br />
               <textarea
                 id='notes'
@@ -124,13 +145,19 @@ export default function Header(props) {
               ></textarea>
               <div style={{ textAlign: 'right' }}>
                 <Button
+                  style={{ color: '#292929', borderColor: '#ffc815' }}
                   type='submit'
-                  variant='ghost'
+                  variant='outline'
                   onClick={(e) => handleApp(e)}
                 >
                   Add Application
                 </Button>
-                <Button onClick={onClose}>Close</Button>
+                <Button
+                  onClick={onClose}
+                  style={{ backgroundColor: '#ffc815', color: '#292929' }}
+                >
+                  Close
+                </Button>
               </div>
             </form>
           </ModalBody>
