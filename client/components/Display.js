@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import {
   useDisclosure,
-  Button,
   Container,
   Table,
   Thead,
@@ -20,9 +19,12 @@ export default function Display(props) {
   // state object to hold array of applications
   const [apps, useApps] = useState([]);
 
+  const [ids, useIds] = useState([]);
+
   // state object to hold the current values for the modal
   const [modal, useModal] = useState({});
 
+  //
   const [modalEdit, useModalEdit] = useState(false);
 
   // on click function to handle the opening of the modal
@@ -31,44 +33,26 @@ export default function Display(props) {
     onOpen();
   };
 
-  // conditionally fills table once apps has been populated
-  const fillTable = () => {
-    const rows = [];
-    for (let i = 0; i < apps.length; i += 1) {
-      rows.push(apps[i]);
-    }
-    return rows;
-  };
-
   // use effect to make fetch request to back end for initial list of array items
   useEffect(() => {
     // should be returning results of fetch request, hopefully an array?
     axios.get('/dashboard').then((res) => {
       const tempArr = [];
-      // temporary response before DB route is connected
-      const tempRes = [
-        {
-          company: 'Apple',
-          role: 'Senior Engineer',
-          status: 'Applied',
-          date: '2021-06-07',
-          priority: 2,
-          link: 'http://apple.com',
-          notes: 'Notes for the application!',
-          id: 7,
-        },
-      ];
-      tempRes.forEach((app) => {
+      const idArr = [];
+      res.data.forEach((app) => {
+        idArr.push(app._id);
         tempArr.push(
           <Tr onClick={() => openModal(app)}>
             <Th>{app.company}</Th>
             <Th>{app.role}</Th>
             <Th>{app.status}</Th>
-            <Th>{app.date}</Th>
+            <Th>{app.date_applied}</Th>
             <Th>{app.priority}</Th>
           </Tr>
         );
       });
+      useIds(idArr);
+      console.log(idArr);
       useApps(tempArr);
     });
   }, []);
@@ -79,9 +63,19 @@ export default function Display(props) {
         useLoginStatus={props.useLoginStatus}
         useApps={useApps}
         apps={apps}
+        openModal={openModal}
       />
       <Container maxW='container.lg' centerContent>
-        <h1>Nektr</h1>
+        <h1 style={{ textAlign: 'center' }}>
+          Welcome to Nektr.
+          <br />
+          <br />
+          If you would like to add a new application, please select the menu on
+          the top left.
+          <br />
+          Below are your current applications. To see more details about, edit,
+          or delete an application, please select it below.
+        </h1>
         <br />
         <br />
       </Container>
@@ -95,8 +89,7 @@ export default function Display(props) {
             <Th>Priority</Th>
           </Tr>
         </Thead>
-        {/* if apps has been populated, fill table */}
-        <Tbody>{apps.length > 0 && fillTable()}</Tbody>
+        <Tbody>{apps}</Tbody>
       </Table>
 
       <DisplayModal
@@ -105,8 +98,12 @@ export default function Display(props) {
         modalEdit={modalEdit}
         useModalEdit={useModalEdit}
         modal={modal}
+        useModal={useModal}
         apps={apps}
         useApps={useApps}
+        ids={ids}
+        openModal={openModal}
+        useIds={useIds}
       />
     </Container>
   );
