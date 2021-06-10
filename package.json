@@ -4,7 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "server/server.js",
+    "start": "node server/server.js",
     "build": "NODE_ENV=production webpack",
     "server": "npm run build && npm start",
     "dev": "nodemon server/server.js & NODE_ENV=development webpack serve --open",
@@ -16,7 +16,9 @@
     "moduleNameMapper": {
       "^.+\\.(css|scss)$": "../../stub.js"
     },
-    "setupFilesAfterEnv": ["./setupTests.js"] 
+    "setupFilesAfterEnv": [
+      "./setupTests.js"
+    ]
   },
   "repository": {
     "type": "git",
@@ -35,10 +37,16 @@
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "axios": "^0.21.1",
+    "base64url": "^3.0.1",
     "bootstrap": "^4.6.0",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "framer-motion": "^4.1.17",
+    "passport": "^0.4.1",
+    "passport-google-oauth": "^2.0.0",
+    "passport-google-oauth20": "^2.0.0",
+    "pause": "^0.1.0",
     "pg": "^8.6.0",
     "postgres": "^1.0.2",
     "puppeteer": "^10.0.0",
@@ -46,7 +54,8 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.7",
-    "sass": "^1.34.1"
+    "sass": "^1.34.1",
+    "uid2": "^0.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
