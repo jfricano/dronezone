@@ -8,7 +8,8 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'npm install -v'
+        sh '''echo "Npm Install"
+npm install -v'''
       }
     }
 
