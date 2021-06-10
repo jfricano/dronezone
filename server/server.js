@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
-// const passport = require("passport");
-// const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const {
   getAllJobApps,
   addJobApp,
@@ -26,23 +26,23 @@ app.use(express.urlencoded({ extended: true }));
 
 // serve static files
 // app.use(express.static(path.resolve(__dirname, "../public")));
-app.use(express.static(path.resolve(__dirname, "../dist")));
+app.use('/dist', express.static(path.resolve(__dirname, "../dist")));
 
 // google OAuth
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: GOOGLE_CLIENT_ID,
-//       clientSecret: GOOGLE_CLIENT_SECRET,
-//       callbackURL: /* not sure what goes here */''
-//     },
-//     (accessToken, refreshToken, profile, done) => {
-//       User.findOrCreate({ googleId: profile.id }, function (err, user) {
-//         return done(err, user);
-//       });
-//     }
-//   )
-// );
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: "/dashboard",
+    },
+    (accessToken, refreshToken, profile, done) => {
+      User.findOrCreate({ googleId: profile.id }, (err, user) => {
+        return done(err, user);
+      });
+    }
+  )
+);
 
 // home / landing page
 app.get("/", (req, res) => {
@@ -50,6 +50,9 @@ app.get("/", (req, res) => {
 });
 
 // USER MANAGEMENT ------------
+
+// app.get('/login', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+app.get('/login', passport.authenticate('google'));
 
 // I don't think we need a GET to '/signup' ?
 // it seems this could be handled with React Router
@@ -69,28 +72,28 @@ app.get("/", (req, res) => {
 // REQ.body:  username, password (bcrypt)
 // on successful login, RES:  array of all of that user's applications
 // on failed loging, RES: null
-app.get(
-  "/login",
-  /* <some middleware> */
-  (req, res) => {
-    res.status(200).json(res.locals.user);
-  }
-);
+// app.get(
+//   "/login",
+//   /* <some middleware> */
+//   (req, res) => {
+//     res.status(200).json(res.locals.user);
+//   }
+// );
 
-app.post("/login", /* middleware */ (req, res) => res.status(200));
+// app.post("/login", /* middleware */ (req, res) => res.status(200));
 
 // IS LOGOUT ROUTE EVEN NECESSARY?? CAN SIMPLY UPDATE STATE ON FRONTEND
 // WHAT DOES BACKEND NEED TO DO? AND WHAT SHOULD RESPONSE BE??
 // logout
 // RES: redirect to home page
-app.get(
-  "/logout",
-  /* <some middleware> */
-  (req, res) => {
-    // res.redirect('/');
-    res.send(200).json(res.locals.isLoggedIn);
-  }
-);
+// app.get(
+//   "/logout",
+//   /* <some middleware> */
+//   (req, res) => {
+//     // res.redirect('/');
+//     res.send(200).json(res.locals.isLoggedIn);
+//   }
+// );
 
 // MAIN APP / JOB APPLICATION MANAGEMENT ------------
 /**
