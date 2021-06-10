@@ -11,17 +11,19 @@ import {
 } from '@chakra-ui/react';
 import theme from '../../public/theme';
 import '../../public/index.scss';
+import Cookies from 'js-cookie';
 
 export default function App() {
   const [loginStatus, useLoginStatus] = useState(false);
+  const [email, useEmail] = useState(Cookies.get('email'));
 
   return (
     <ChakraProvider theme={theme}>
       <Box className='outer-container'>
-        {loginStatus ? (
-          <Display useLoginStatus={useLoginStatus} />
+        {email ? (
+          <Display useEmail={useEmail} email={email} />
         ) : (
-          <Login useLoginStatus={useLoginStatus} />
+          <Login useEmail={useEmail} email={email} />
         )}
       </Box>
     </ChakraProvider>

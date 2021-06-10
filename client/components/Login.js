@@ -39,7 +39,6 @@ export default function Login(props) {
           marginTop: '30px',
         }}
       >
-        Log In With Google
         {/* below is for testing purposes - cannot be fetch */}
         <a href='/login'>Log in with Google</a>
       </Button>

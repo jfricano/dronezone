@@ -60,7 +60,8 @@ export default function Display(props) {
   return (
     <Container maxW='container.lg'>
       <Header
-        useLoginStatus={props.useLoginStatus}
+        useEmail={props.useEmail}
+        email={props.email}
         useApps={useApps}
         apps={apps}
         openModal={openModal}
@@ -159,6 +160,7 @@ export default function Display(props) {
         ids={ids}
         openModal={openModal}
         useIds={useIds}
+        email={props.email}
       />
     </Container>
   );
