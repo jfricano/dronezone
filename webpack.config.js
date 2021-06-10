@@ -36,8 +36,14 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/react', '@babel/env'],
+            plugins: ['@babel/plugin-transform-runtime', '@babel/transform-async-to-generator'],
           },
         },
+      },
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
       },
       {
         test: /\.s[ac]ss$/i,
