@@ -17,12 +17,14 @@ import {
   IconButton,
   Tr,
   Th,
+  useColorMode,
 } from '@chakra-ui/react';
 import axios from 'axios';
 
-import { HamburgerIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 export default function Header(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const handleApp = (e) => {
     e.preventDefault();
@@ -150,9 +152,18 @@ export default function Header(props) {
           </MenuItem>
         </MenuList>
       </Menu>
-      <Container centerContent>
-        <h1>NEKTR</h1>
-      </Container>
+      <Button
+        onClick={toggleColorMode}
+        variant='outline'
+        style={{ margin: '0px 5px 0px 5px' }}
+      >
+        {colorMode === 'dark' ? (
+          <SunIcon style={{ marginRight: '10px' }} />
+        ) : (
+          <MoonIcon style={{ marginRight: '10px' }} />
+        )}
+        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+      </Button>
     </Container>
   );
 }
